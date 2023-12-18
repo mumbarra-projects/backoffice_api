@@ -9,7 +9,7 @@ import { PrismaModule } from './common';
     ConfigModule.forRoot({ isGlobal: true, expandVariables: true }),
     PrismaModule.register({ logQueries: false }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,4 +1,4 @@
-# Nest js Microservice Boilerplate (prisma)
+# Backoffice Microservice
 
 1. Rename `.env.example` to `.env` and add your database configuration.
 2. Run `npm i`

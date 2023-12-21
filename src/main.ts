@@ -1,36 +1,37 @@
-import { Logger } from '@nestjs/common';
+import * as bodyParser from 'body-parser';
 import { NestFactory } from '@nestjs/core';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { AppModule } from './app.module';
-import {
-  MicroserviceExceptionFilter,
-  MicroserviceValidationPipe,
-  PrismaRepository,
-} from './common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-const bootstrap = async () => {
-  const logger = new Logger('Bootstrap');
-  const port = 3000;
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.use(bodyParser.json({ limit: '1mb' }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, validateCustomDecorators: true }));
 
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.TCP,
-      options: {
-        host: '0.0.0.0',
-        port,
-      },
-    },
-  );
+  const configService = app.get(ConfigService);
 
-  const prismaRepository: PrismaRepository = app.get(PrismaRepository);
-  prismaRepository.enableShutdownHooks(app);
+  app.setGlobalPrefix('');
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
 
-  app.useGlobalPipes(new MicroserviceValidationPipe());
-  app.useGlobalFilters(new MicroserviceExceptionFilter());
+  app.enableCors({ origin: '*' });
 
-  await app.listen();
-  logger.log(`Microservice started on port: ${port}`);
-};
+  const documentBuilder = new DocumentBuilder()
+    .setTitle('Backoffice Microservice')
+    .setDescription('')
+    .setVersion('0.0.1')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, documentBuilder);
+  SwaggerModule.setup('/swagger', app, document);
+
+  await app.listen(configService.get('APP_PORT'));
+  Logger.log(`Application is running on: ${await app.getUrl()}`);
+}
 
 bootstrap();

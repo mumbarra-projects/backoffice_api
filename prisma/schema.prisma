@@ -8,28 +8,57 @@ datasource db {
 }
 
 model company {
-  id           BigInt        @id @default(autoincrement())
-  uuid         String        @unique(map: "uuid_UNIQUE") @db.VarChar(45)
-  name         String        @db.VarChar(255)
-  businessName String        @map("business_name") @db.VarChar(255)
-  document     String        @db.VarChar(14)
-  address      String?       @db.VarChar(255)
-  zipCode      String?       @map("zip_code") @db.VarChar(8)
-  phone        String?       @db.VarChar(14)
-  email        String        @db.VarChar(255)
-  status       companyStatus
-  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt    DateTime?     @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
-  user         user[]
+  id             BigInt            @id @default(autoincrement())
+  uuid           String            @unique(map: "uuid_UNIQUE") @db.VarChar(45)
+  name           String            @db.VarChar(255)
+  businessName   String            @map("business_name") @db.VarChar(255)
+  document       String            @unique(map: "document_UNIQUE") @db.VarChar(14)
+  address        String?           @db.VarChar(255)
+  zipCode        String?           @map("zip_code") @db.VarChar(8)
+  phone          String?           @db.VarChar(14)
+  email          String            @unique(map: "email_UNIQUE") @db.VarChar(255)
+  status         companyStatus
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt      DateTime?         @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+  companyService company_service[]
+  user           user[]
+}
+
+model company_service {
+  id        BigInt               @id @default(autoincrement())
+  uuid      String               @unique(map: "uuid_UNIQUE") @db.VarChar(45)
+  apikey    String               @unique(map: "api_key_UNIQUE") @map("api_key") @db.VarChar(45)
+  companyId BigInt               @map("company_id")
+  serviceId BigInt               @map("service_id")
+  status    companyServiceStatus
+  createdAt DateTime             @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime?            @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+  company   company              @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_company_service_company")
+  service   service              @relation(fields: [serviceId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_company_service_service")
+
+  @@index([companyId], map: "fk_company_service_company_idx")
+  @@index([serviceId], map: "fk_company_service_service_idx")
+}
+
+model service {
+  id             BigInt            @id @default(autoincrement())
+  uuid           String            @unique(map: "uuid_UNIQUE") @db.VarChar(45)
+  name           String            @unique(map: "name_UNIQUE") @db.VarChar(255)
+  description    String?           @db.VarChar(255)
+  level          serviceLevel      @unique(map: "level_UNIQUE")
+  status         serviceStatus
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt      DateTime?         @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+  companyService company_service[]
 }
 
 model user {
   id          BigInt          @id @default(autoincrement())
   uuid        String          @unique(map: "uuid_UNIQUE") @db.VarChar(45)
   name        String          @db.VarChar(255)
-  document    String          @db.VarChar(14)
-  username    String          @db.VarChar(255)
-  email       String?         @db.VarChar(255)
+  document    String          @unique(map: "document_UNIQUE") @db.VarChar(14)
+  username    String          @unique(map: "username_UNIQUE") @db.VarChar(255)
+  email       String?         @unique(map: "email_UNIQUE") @db.VarChar(255)
   password    String          @db.VarChar(255)
   status      userStatus
   accessLevel userAccessLevel @map("access_level")
@@ -42,6 +71,24 @@ model user {
 }
 
 enum companyStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum companyServiceStatus {
+  PENDING
+  ACTIVE
+  BLOCKED
+  CLOSED
+}
+
+enum serviceLevel {
+  FREE
+  LIGHT
+  PRO
+}
+
+enum serviceStatus {
   ACTIVE
   INACTIVE
 }

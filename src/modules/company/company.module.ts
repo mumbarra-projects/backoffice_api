@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 import { CompanyRepository } from './company.repostiory';
-import { FindAllCompany } from './useCases/find-all-company';
+import { FindByIdCompany } from './useCases/find-by-id.company';
+import { FindAllCompany } from './useCases/find-all.company';
+import { CreateCompany } from './useCases/create.company';
 
 @Module({
   controllers: [
@@ -11,7 +13,9 @@ import { FindAllCompany } from './useCases/find-all-company';
   providers: [
     CompanyService,
     CompanyRepository,
-    FindAllCompany
+    FindAllCompany,
+    FindByIdCompany,
+    CreateCompany
   ],
   exports: [
     CompanyService

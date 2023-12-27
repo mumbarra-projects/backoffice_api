@@ -1,7 +1,7 @@
 import { companyStatus } from '@prisma/client';
 
 export class CompanyModel {
-  id: bigint;
+  id?: bigint;
   uuid: string;
   name: string;
   businessName: string;
@@ -11,6 +11,6 @@ export class CompanyModel {
   phone?: string;
   email: string;
   status: companyStatus;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
 }

@@ -17,7 +17,7 @@ export class PrismaRepository extends PrismaClient implements OnModuleInit {
     });
 
     if (options.logQueries) {
-      this.$on('query' as any, createPrismaQueryEventHandler({
+      this.$on('query' as never, createPrismaQueryEventHandler({
         logger: (query) => {
           this.logger.verbose(query, 'PrismaClient');
         },
@@ -33,7 +33,7 @@ export class PrismaRepository extends PrismaClient implements OnModuleInit {
   }
 
   async enableShutdownHooks(app: INestMicroservice) {
-    this.$on('beforeExit', async () => {
+    this.$on('beforeExit' as never, async () => {
       await app.close();
     })
   }

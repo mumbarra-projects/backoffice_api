@@ -5,9 +5,9 @@ import { Inject } from '@nestjs/common';
 const prismaRepositories = new Set<PrismaDelegateNames>();
 
 export function createRepoisitoryProviders() {
-  return [...prismaRepositories].map((name: string) => {
+  return [...prismaRepositories].map((name: keyof PrismaRepository) => {
     return {
-      provide: `${name}PrismaRepository`,
+      provide: name,
       inject: [PrismaRepository],
       useFactory: (prisma: PrismaRepository) => prisma[name],
     }
@@ -16,7 +16,7 @@ export function createRepoisitoryProviders() {
 
 export function InjectRepository(name: PrismaDelegateNames) {
   prismaRepositories.add(name);
-  return Inject(`${name as string}PrismaRepository`);
+  return Inject(`${name as string}`);
 }
 
 export type PrismaDelegateNames = keyof {

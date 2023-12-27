@@ -1,4 +1,4 @@
-import { companyStatus, company_service, user } from '@prisma/client';
+import { companyStatus } from '@prisma/client';
 
 export class CompanyModel {
   id: bigint;

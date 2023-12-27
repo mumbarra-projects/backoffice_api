@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '../prisma/inject-repository.decorator';
 import { PrismaRepository } from '../prisma/prisma.repository';
-import { CompanyModel } from './company.model';
+import { CompanyModel } from './dtos/company.model';
 
 @Injectable()
 export class CompanyRepository {

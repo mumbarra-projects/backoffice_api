@@ -43,14 +43,13 @@ CREATE TABLE `service` (
     `uuid` VARCHAR(45) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NULL,
-    `level` ENUM('FREE', 'LIGHT', 'PRO') NOT NULL,
+    `level` ENUM('FREE', 'BASIC', 'ESSENTIAL', 'COMPLETE', 'PREMIUM') NOT NULL,
+    `plan` ENUM('YEARLY', 'MONTHLY') NOT NULL,
     `status` ENUM('ACTIVE', 'INACTIVE') NOT NULL,
     `created_at` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     `updated_at` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
 
     UNIQUE INDEX `uuid_UNIQUE`(`uuid`),
-    UNIQUE INDEX `name_UNIQUE`(`name`),
-    UNIQUE INDEX `level_UNIQUE`(`level`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

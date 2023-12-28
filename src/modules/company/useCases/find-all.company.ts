@@ -11,10 +11,10 @@ export class FindAllCompany {
 
   async execute(): Promise<CompanyResponse[]> {
     const models = await this.repository.find();
-    return this.getMap(models);
+    return this.getMapResponse(models);
   }
 
-  private getMap(models: CompanyModel[]): CompanyResponse[] {
+  private getMapResponse(models: CompanyModel[]): CompanyResponse[] {
     return models.map((model: CompanyModel) => ({
       uuid: model.uuid,
       name: model.name,

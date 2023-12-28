@@ -15,10 +15,10 @@ export class FindByIdCompany {
     if (!model) {
       throw new NotFoundException('Company not found');
     }
-    return this.getMap(model);
+    return this.getMapResponse(model);
   }
 
-  private getMap(model: CompanyModel): CompanyResponse {
+  private getMapResponse(model: CompanyModel): CompanyResponse {
     return {
       uuid: model.uuid,
       name: model.name,

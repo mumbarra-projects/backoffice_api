@@ -46,6 +46,7 @@ model service {
   name           String            @unique(map: "name_UNIQUE") @db.VarChar(255)
   description    String?           @db.VarChar(255)
   level          serviceLevel      @unique(map: "level_UNIQUE")
+  plan           servicePlan
   status         serviceStatus
   createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt      DateTime?         @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
@@ -84,8 +85,15 @@ enum companyServiceStatus {
 
 enum serviceLevel {
   FREE
-  LIGHT
-  PRO
+  BASIC
+  ESSENTIAL
+  COMPLETE
+  PREMIUM
+}
+
+enum servicePlan {
+  YEARLY
+  MONTHLY
 }
 
 enum serviceStatus {

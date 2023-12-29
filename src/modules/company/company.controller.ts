@@ -8,7 +8,7 @@ import { ICompanyService } from './company.service.interface';
 @Controller('company')
 export class CompanyController {
   constructor(
-    @Inject('COMPANY_SERVICE')
+    @Inject('COMPANY_INTERFACE')
     private readonly service: ICompanyService,
   ) { }
 

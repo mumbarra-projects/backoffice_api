@@ -43,9 +43,9 @@ model company_service {
 model service {
   id             BigInt            @id @default(autoincrement())
   uuid           String            @unique(map: "uuid_UNIQUE") @db.VarChar(45)
-  name           String            @unique(map: "name_UNIQUE") @db.VarChar(255)
+  name           String            @db.VarChar(255)
   description    String?           @db.VarChar(255)
-  level          serviceLevel      @unique(map: "level_UNIQUE")
+  level          serviceLevel
   plan           servicePlan
   status         serviceStatus
   createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamp(0)

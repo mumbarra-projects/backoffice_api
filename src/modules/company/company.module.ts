@@ -15,7 +15,7 @@ import { DeleteCompany } from './useCases/delete.company ';
   providers: [
     CompanyService,
     {
-      provide: 'COMPANY_SERVICE',
+      provide: 'COMPANY_INTERFACE',
       useFactory: (companyService: CompanyService) => companyService,
       inject: [CompanyService]
     },

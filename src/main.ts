@@ -1,10 +1,10 @@
 import * as bodyParser from 'body-parser';
+import * as path from 'path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { version } from 'uuid';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,12 +21,15 @@ async function bootstrap() {
 
   app.enableCors({ origin: '*' });
 
+  const pkJsonPath = path.join(__dirname, '..', 'package.json');
+  const version = require(pkJsonPath).version;
+
   const documentBuilder = new DocumentBuilder()
     .setTitle('Backoffice Microservice')
     .setDescription(
       "The backoffice microservice is designed to facilitate the management of a company's internal operations, including administrative tasks, user management and access control."
     )
-    .setVersion(process.env.APP_VERSION)
+    .setVersion(version)
     .addBearerAuth()
     .build();
 

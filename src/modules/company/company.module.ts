@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
-import { CompanyRepository } from './company.repostiory';
+import { CompanyRepository } from './company.repository';
 import { FindByIdCompany } from './useCases/find-by-id.company';
 import { FindAllCompany } from './useCases/find-all.company';
 import { CreateCompany } from './useCases/create.company';
 import { UpdateCompany } from './useCases/update.company';
 import { DeleteCompany } from './useCases/delete.company ';
+import { CompanyMapping } from './company.mapping';
 
 @Module({
   controllers: [
@@ -20,6 +21,7 @@ import { DeleteCompany } from './useCases/delete.company ';
       inject: [CompanyService]
     },
     CompanyRepository,
+    CompanyMapping,
     FindAllCompany,
     FindByIdCompany,
     CreateCompany,
@@ -28,6 +30,8 @@ import { DeleteCompany } from './useCases/delete.company ';
   ],
   exports: [
     CompanyService,
+    CompanyMapping,
+    CompanyRepository
   ]
 })
 export class CompanyModule { }

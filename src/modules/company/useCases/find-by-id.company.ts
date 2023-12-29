@@ -1,36 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CompanyRepository } from '../company.repostiory';
+import { CompanyRepository } from '../company.repository';
 import { CompanyResponse } from '../dtos/company.response';
-import { CompanyModel } from '../dtos/company.model';
+import { CompanyMapping } from '../company.mapping';
 
 @Injectable()
 export class FindByIdCompany {
   constructor(
     private readonly repository: CompanyRepository,
+    private readonly mapping: CompanyMapping,
   ) { }
 
   async execute(uuid: string): Promise<CompanyResponse> {
-    const model = await this.repository.findById(uuid);
+    const model = await this.repository.findByUuid(uuid);
 
     if (!model) {
       throw new NotFoundException('Company not found');
     }
-    return this.getMapResponse(model);
-  }
 
-  private getMapResponse(model: CompanyModel): CompanyResponse {
-    return {
-      uuid: model.uuid,
-      name: model.name,
-      businessName: model.businessName,
-      document: model.document,
-      address: model.address,
-      zipCode: model.zipCode,
-      phone: model.phone,
-      email: model.email,
-      status: model.status,
-      createdAt: model.createdAt,
-      updatedAt: model.updatedAt
-    };
+    return this.mapping.response(model);
   }
 }

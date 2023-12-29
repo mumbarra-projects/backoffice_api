@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CompanyRepository } from './company.repostiory';
+import { CompanyRepository } from './company.repository';
 import { CompanyResponse } from './dtos/company.response';
 import { FindByIdCompany } from './useCases/find-by-id.company';
 import { FindAllCompany } from './useCases/find-all.company';
@@ -23,7 +23,7 @@ export class CompanyService implements ICompanyService {
     return this.findAllCompany.execute();
   }
 
-  async findById(uuid: string): Promise<CompanyResponse> {
+  async findByUuid(uuid: string): Promise<CompanyResponse> {
     return this.findByIdCompany.execute(uuid);
   }
 

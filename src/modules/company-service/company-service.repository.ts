@@ -1,28 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '../prisma/inject-repository.decorator';
 import { PrismaRepository } from '../prisma/prisma.repository';
-import { CompanyModel } from './dtos/company.model';
+import { CompanyServiceModel } from './dtos/company-service.model';
 
 @Injectable()
-export class CompanyRepository {
+export class CompanyServiceRepository {
   constructor(
-    @InjectRepository('company')
-    private readonly repository: PrismaRepository['company'],
+    @InjectRepository('company_service')
+    private readonly repository: PrismaRepository['company_service'],
   ) { }
 
   async find() {
     return this.repository.findMany();
   }
 
-  async findById(uuid: string) {
+  async findByUuid(uuid: string) {
     return this.repository.findUnique({ where: { uuid: uuid } });
   }
 
-  async create(data: CompanyModel) {
+  async create(data: CompanyServiceModel) {
     return this.repository.create({ data });
   }
 
-  async update(data: CompanyModel, uuid: string) {
+  async update(data: CompanyServiceModel, uuid: string) {
     return this.repository.update({ where: { uuid: uuid }, data });
   }
 

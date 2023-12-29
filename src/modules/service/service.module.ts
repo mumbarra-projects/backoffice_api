@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ServiceService } from './company.service';
 import { ServiceController } from './service.controller';
-import { ServiceRepository } from './service.repostiory';
 import { CreateService } from './useCases/create.service';
 import { DeleteService } from './useCases/delete.service';
 import { FindAllService } from './useCases/find-all.service';
 import { FindByIdService } from './useCases/find-by-id.service';
 import { UpdateService } from './useCases/update.service';
+import { ServiceService } from './service.service';
+import { ServiceMapping } from './service.mapping';
+import { ServiceRepository } from './service.repository';
 
 @Module({
   controllers: [
@@ -17,10 +18,11 @@ import { UpdateService } from './useCases/update.service';
     ServiceService,
     {
       provide: 'SERVICE_INTERFACE',
-      useFactory: (ServiceService: ServiceService) => ServiceService,
+      useFactory: (serviceService: ServiceService) => serviceService,
       inject: [ServiceService]
     },
     ServiceRepository,
+    ServiceMapping,
     FindAllService,
     FindByIdService,
     CreateService,
@@ -29,6 +31,8 @@ import { UpdateService } from './useCases/update.service';
   ],
   exports: [
     ServiceService,
+    ServiceMapping,
+    ServiceRepository
   ]
 })
 export class ServiceModule { }

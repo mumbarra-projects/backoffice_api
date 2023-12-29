@@ -22,10 +22,10 @@ export class CompanyController {
   @Get(':uuid')
   @ApiOkResponse({ type: CompanyResponse })
   @HttpCode(200)
-  async findById(
+  async findByUuid(
     @Param('uuid') uuid: string
   ): Promise<CompanyResponse> {
-    return this.service.findById(uuid);
+    return this.service.findByUuid(uuid);
   }
 
   @Post()

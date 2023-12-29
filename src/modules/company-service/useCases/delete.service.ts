@@ -1,17 +1,17 @@
+import { ServiceRepository } from '@app/modules/service/service.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CompanyRepository } from '../company.repository';
 
 @Injectable()
-export class DeleteCompany {
+export class DeleteService {
   constructor(
-    private readonly repository: CompanyRepository,
+    private readonly repository: ServiceRepository,
   ) { }
 
   async execute(uuid: string): Promise<void> {
     const model = await this.repository.findByUuid(uuid);
 
     if (!model) {
-      throw new NotFoundException('Company not found');
+      throw new NotFoundException('Service not found');
     }
 
     this.repository.delete(uuid);

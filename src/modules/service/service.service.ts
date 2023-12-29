@@ -22,7 +22,7 @@ export class ServiceService implements IServiceService {
     return this.findAllService.execute();
   }
 
-  async findById(uuid: string): Promise<ServiceResponse> {
+  async findByUuid(uuid: string): Promise<ServiceResponse> {
     return this.findByIdService.execute(uuid);
   }
 

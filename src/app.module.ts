@@ -4,6 +4,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import { validate } from './config/validation';
 import { CompanyModule } from './modules/company/company.module';
 import { ServiceModule } from './modules/service/service.module';
+import { CompanyServiceModule } from './modules/company-service/company-service.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { ServiceModule } from './modules/service/service.module';
     PrismaModule.register({ logQueries: false }),
     CompanyModule,
     ServiceModule,
+    CompanyServiceModule,
   ],
 })
 export class AppModule { }

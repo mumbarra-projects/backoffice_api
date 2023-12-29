@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ServiceRepository } from '../service.repostiory';
+import { ServiceRepository } from '../service.repository';
 
 @Injectable()
 export class DeleteService {
@@ -8,7 +8,7 @@ export class DeleteService {
   ) { }
 
   async execute(uuid: string): Promise<void> {
-    const model = await this.repository.findById(uuid);
+    const model = await this.repository.findByUuid(uuid);
 
     if (!model) {
       throw new NotFoundException('Service not found');

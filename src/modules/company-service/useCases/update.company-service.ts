@@ -1,15 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
-import { CompanyServiceRequest } from '../dtos/company-service.request';
-import { CompanyServiceModel } from '../dtos/company-service.model';
-import { CompanyServiceResponse } from '../dtos/company-service.response';
-import { CompanyServiceRepository } from '../company-service.repository';
 import { CompanyRepository } from '@app/modules/company/company.repository';
 import { ServiceRepository } from '@app/modules/service/service.repository';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CompanyServiceMapping } from '../company-service.mapping';
+import { CompanyServiceRepository } from '../company-service.repository';
+import { CompanyServiceRequest } from '../dtos/company-service.request';
+import { CompanyServiceResponse } from '../dtos/company-service.response';
 
 @Injectable()
-export class CreateService {
+export class UpdateCompanyService {
   constructor(
     private readonly repository: CompanyServiceRepository,
     private readonly mapping: CompanyServiceMapping,
@@ -17,7 +15,9 @@ export class CreateService {
     private readonly serviceRepository: ServiceRepository,
   ) { }
 
-  async execute(request: CompanyServiceRequest): Promise<CompanyServiceResponse> {
+  async execute(request: CompanyServiceRequest, uuid: string): Promise<CompanyServiceResponse> {
+
+    const model = await this.repository.findByUuid(uuid);
 
     const company = await this.companyRepository.findByUuid(request.companyId);
     const service = await this.serviceRepository.findByUuid(request.serviceId);
@@ -30,9 +30,13 @@ export class CreateService {
       throw new NotFoundException('Service not found');
     }
 
-    const data = this.mapping.create(request, company.id, service.id);
+    if (!model) {
+      throw new NotFoundException('Company Service not found');
+    }
 
-    const model = await this.repository.create(data);
-    return this.mapping.response(model, company, service);
+    const data = this.mapping.update(model, request, company.id, service.id);
+
+    const result = await this.repository.update(data, uuid);
+    return this.mapping.response(result, company, service)
   }
 }

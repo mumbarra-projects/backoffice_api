@@ -5,6 +5,7 @@ import { validate } from './config/validation';
 import { CompanyModule } from './modules/company/company.module';
 import { ServiceModule } from './modules/service/service.module';
 import { CompanyServiceModule } from './modules/company-service/company-service.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CompanyServiceModule } from './modules/company-service/company-service.
     CompanyModule,
     ServiceModule,
     CompanyServiceModule,
+    UserModule,
   ],
 })
 export class AppModule { }

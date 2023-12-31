@@ -1,13 +1,13 @@
-import { CompanyRepository } from '@app/modules/company/company.repository';
-import { ServiceRepository } from '@app/modules/service/service.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CompanyServiceMapping } from '../company-service.mapping';
-import { CompanyServiceRepository } from '../company-service.repository';
 import { CompanyServiceRequest } from '../dtos/company-service.request';
 import { CompanyServiceResponse } from '../dtos/company-service.response';
+import { CompanyServiceRepository } from '../company-service.repository';
+import { CompanyRepository } from '@app/modules/company/company.repository';
+import { ServiceRepository } from '@app/modules/service/service.repository';
+import { CompanyServiceMapping } from '../company-service.mapping';
 
 @Injectable()
-export class UpdateService {
+export class CreateCompanyService {
   constructor(
     private readonly repository: CompanyServiceRepository,
     private readonly mapping: CompanyServiceMapping,
@@ -15,9 +15,7 @@ export class UpdateService {
     private readonly serviceRepository: ServiceRepository,
   ) { }
 
-  async execute(request: CompanyServiceRequest, uuid: string): Promise<CompanyServiceResponse> {
-
-    const model = await this.repository.findByUuid(uuid);
+  async execute(request: CompanyServiceRequest): Promise<CompanyServiceResponse> {
 
     const company = await this.companyRepository.findByUuid(request.companyId);
     const service = await this.serviceRepository.findByUuid(request.serviceId);
@@ -30,13 +28,9 @@ export class UpdateService {
       throw new NotFoundException('Service not found');
     }
 
-    if (!model) {
-      throw new NotFoundException('Company Service not found');
-    }
+    const data = this.mapping.create(request, company.id, service.id);
 
-    const data = this.mapping.update(model, request, company.id, service.id);
-
-    const result = await this.repository.update(data, uuid);
-    return this.mapping.response(result, company, service)
+    const model = await this.repository.create(data);
+    return this.mapping.response(model, company, service);
   }
 }

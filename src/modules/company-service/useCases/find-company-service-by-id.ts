@@ -6,7 +6,7 @@ import { CompanyServiceRepository } from '../company-service.repository';
 import { CompanyServiceResponse } from '../dtos/company-service.response';
 
 @Injectable()
-export class FindByIdService {
+export class FindByIdCompanyService {
   constructor(
     private readonly repository: CompanyServiceRepository,
     private readonly mapping: CompanyServiceMapping,

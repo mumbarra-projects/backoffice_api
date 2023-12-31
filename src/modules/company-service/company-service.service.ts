@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateService } from './useCases/create.service';
-import { DeleteService } from './useCases/delete.service';
-import { FindAllService } from './useCases/find-all.service';
-import { FindByIdService } from './useCases/find-by-id.service';
-import { UpdateService } from './useCases/update.service';
 import { ICompanyServiceService } from './company-service.service.interface';
 import { CompanyServiceRequest } from './dtos/company-service.request';
 import { CompanyServiceResponse } from './dtos/company-service.response';
+import { CreateCompanyService } from './useCases/create.company-service';
+import { DeleteCompanyService } from './useCases/delete.company-service';
+import { FindAllCompanyService } from './useCases/find-all-company-service';
+import { FindByIdCompanyService } from './useCases/find-company-service-by-id';
+import { UpdateCompanyService } from './useCases/update.company-service';
 
 @Injectable()
 export class CompanyServiceService implements ICompanyServiceService {
   constructor(
-    private readonly findAllService: FindAllService,
-    private readonly findByIdService: FindByIdService,
-    private readonly createService: CreateService,
-    private readonly updateService: UpdateService,
-    private readonly deleteService: DeleteService,
+    private readonly findAllService: FindAllCompanyService,
+    private readonly findByIdService: FindByIdCompanyService,
+    private readonly createService: CreateCompanyService,
+    private readonly updateService: UpdateCompanyService,
+    private readonly deleteService: DeleteCompanyService,
   ) { }
 
   async findAll(): Promise<CompanyServiceResponse[]> {

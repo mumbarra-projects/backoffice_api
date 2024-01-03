@@ -21,7 +21,7 @@ export class CreateUser {
       throw new NotFoundException('Company not found');
     }
 
-    const data = this.mapping.create(request, company.id);
+    const data = await this.mapping.create(request, company.id);
 
     const model = await this.repository.create(data);
     return this.mapping.response(model);

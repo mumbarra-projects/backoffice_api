@@ -35,7 +35,8 @@ import { UpdateUser } from './useCases/update.user';
   ],
   exports: [
     UserService,
-    UserMapping
+    UserMapping,
+    UserRepository
   ]
 })
 export class UserModule { }

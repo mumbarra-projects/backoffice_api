@@ -18,6 +18,10 @@ export class UserRepository {
     return this.repository.findUnique({ where: { uuid: uuid } });
   }
 
+  async findByUsername(username: string) {
+    return this.repository.findUnique({ where: { username: username } });
+  }
+
   async create(data: UserModel) {
     return this.repository.create({ data });
   }

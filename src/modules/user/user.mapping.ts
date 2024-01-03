@@ -3,19 +3,22 @@ import { v4 as uuid } from 'uuid';
 import { UserModel } from './dtos/user.model';
 import { UserRequest } from './dtos/user.request';
 import { UserResponse } from './dtos/user.response';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserMapping {
   constructor() { }
 
-  create(request: UserRequest, companyId: bigint): UserModel {
+  async create(request: UserRequest, companyId: bigint): Promise<UserModel> {
+    const hashedPassword = await this.hassPassword(request.password);
+
     const data: UserModel = {
       uuid: `USR-${uuid()}`,
       name: request.name,
       document: request.document,
       username: request.username,
       email: request.email,
-      password: request.password,
+      password: hashedPassword,
       status: request.status ? request.status : 'INACTIVE',
       accessLevel: request.accessLevel,
       companyId: companyId
@@ -52,5 +55,11 @@ export class UserMapping {
 
   responseList(models: UserModel[]): UserResponse[] {
     return models.map((model: UserModel) => this.response(model));
+  }
+
+  private async hassPassword(password: string): Promise<string> {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return hashedPassword;
   }
 }

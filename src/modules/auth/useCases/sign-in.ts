@@ -1,13 +1,13 @@
 import { CompanyRepository } from '@app/modules/company/company.repository';
 import { UserRepository } from '@app/modules/user/user.repository';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthRequest } from '../dtos/auth.request';
 import { AuthResponse } from '../dtos/auth.response';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class Auth {
+export class SignIn {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly companyRepository: CompanyRepository,
@@ -25,7 +25,7 @@ export class Auth {
     }
 
     if (user.username !== request.username && user.password !== hashedPassword) {
-      throw new NotFoundException('Invalid username or password');
+      throw new UnauthorizedException('Invalid username or password');
     }
 
     const payload = {
@@ -35,7 +35,7 @@ export class Auth {
       companyId: company.uuid
     }
 
-    const token = this.jwtService.sign(payload);
+    const token = await this.jwtService.signAsync(payload);
 
     const response = new AuthResponse();
     response.access_token = token;

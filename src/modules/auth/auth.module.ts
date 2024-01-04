@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { Auth } from './useCases/auth';
-import { JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { CompanyModule } from '../company/company.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth.guard';
+import { SignIn } from './useCases/sign-in';
 
 @Module({
   controllers: [
@@ -12,18 +14,25 @@ import { CompanyModule } from '../company/company.module';
   ],
   imports: [
     UserModule,
-    CompanyModule
+    CompanyModule,
+    JwtModule.register({
+      global: true,
+      secret: process.env.SECRET_KEY,
+      signOptions: { expiresIn: '1h' },
+    }),
   ],
   providers: [
-    AuthController,
     AuthService,
     {
       provide: 'AUTH_INTERFACE',
       useFactory: (AuthService: AuthService) => AuthService,
       inject: [AuthService]
     },
-    Auth,
-    JwtService
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    SignIn,
   ],
   exports: [
     AuthService,

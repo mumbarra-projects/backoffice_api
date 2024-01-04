@@ -1,8 +1,9 @@
 import { ApiBody, ApiCreatedResponse, ApiExcludeEndpoint, ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ICompanyServiceService } from './company-service.service.interface';
 import { CompanyServiceRequest } from './dtos/company-service.request';
 import { CompanyServiceResponse } from './dtos/company-service.response';
+import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('Company Service')
 @Controller('company_service')
@@ -12,6 +13,7 @@ export class CompanyServiceController {
     private readonly service: ICompanyServiceService,
   ) { }
 
+  @UseGuards(AuthGuard)
   @Get()
   @ApiOkResponse({ isArray: true, type: CompanyServiceResponse })
   @HttpCode(200)
@@ -19,6 +21,7 @@ export class CompanyServiceController {
     return this.service.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':uuid')
   @ApiOkResponse({ type: CompanyServiceResponse })
   @HttpCode(200)
@@ -28,6 +31,8 @@ export class CompanyServiceController {
     return this.service.findByUuid(uuid);
   }
 
+  @ApiExcludeEndpoint()
+  @UseGuards(AuthGuard)
   @Post()
   @ApiBody({ type: CompanyServiceRequest, description: 'Service request' })
   @ApiCreatedResponse({ type: CompanyServiceResponse })
@@ -38,6 +43,8 @@ export class CompanyServiceController {
     return this.service.create(request);
   }
 
+  @ApiExcludeEndpoint()
+  @UseGuards(AuthGuard)
   @Put(':uuid')
   @ApiBody({ type: CompanyServiceRequest, description: 'Service request' })
   @ApiOkResponse({ type: CompanyServiceResponse })
@@ -50,6 +57,7 @@ export class CompanyServiceController {
   }
 
   @ApiExcludeEndpoint()
+  @UseGuards(AuthGuard)
   @Delete(':uuid')
   @ApiNoContentResponse()
   @HttpCode(204)

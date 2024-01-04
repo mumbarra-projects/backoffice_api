@@ -7,8 +7,13 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
+  if (process.env.APP_ENV !== 'production') {
+    const dotenv = require('dotenv');
+    dotenv.config();
+  }
+
   const app = await NestFactory.create(AppModule);
-  app.use(bodyParser.json({ limit: '1mb' }));
+  app.use(bodyParser.json({ limit: '50mb' }));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, validateCustomDecorators: true }));
 
   const configService = app.get(ConfigService);

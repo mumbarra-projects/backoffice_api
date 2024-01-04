@@ -33,4 +33,14 @@ export class CompanyRepository {
   async delete(uuid: string) {
     return this.repository.delete({ where: { uuid: uuid } });
   }
+
+  async existByDocument(document: string) {
+    const company = this.repository.findUnique({ where: { document: document } })
+    return company ? true : false;
+  }
+
+  async existByEmail(email: string) {
+    const company = this.repository.findUnique({ where: { email: email } })
+    return company ? true : false;
+  }
 }

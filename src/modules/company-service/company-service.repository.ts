@@ -29,4 +29,9 @@ export class CompanyServiceRepository {
   async delete(uuid: string) {
     return this.repository.delete({ where: { uuid: uuid } });
   }
+
+  async existByApikey(apikey: string) {
+    const companyService = this.repository.findUnique({ where: { apikey: apikey } })
+    return companyService ? true : false;
+  }
 }

@@ -3,6 +3,7 @@ import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put } fro
 import { CompanyResponse } from './dtos/company.response';
 import { CompanyRequest } from './dtos/company.request';
 import { ICompanyService } from './company.service.interface';
+import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Company')
 @Controller('company')
@@ -12,6 +13,7 @@ export class CompanyController {
     private readonly service: ICompanyService,
   ) { }
 
+  @Public()
   @Get()
   @ApiOkResponse({ isArray: true, type: CompanyResponse })
   @HttpCode(200)
@@ -19,6 +21,7 @@ export class CompanyController {
     return this.service.findAll();
   }
 
+  @Public()
   @Get(':uuid')
   @ApiOkResponse({ type: CompanyResponse })
   @HttpCode(200)
@@ -28,6 +31,7 @@ export class CompanyController {
     return this.service.findByUuid(uuid);
   }
 
+  @Public()
   @Post()
   @ApiBody({ type: CompanyRequest, description: 'Company request' })
   @ApiCreatedResponse({ type: CompanyResponse })
@@ -38,6 +42,7 @@ export class CompanyController {
     return this.service.create(request);
   }
 
+  @Public()
   @Put(':uuid')
   @ApiBody({ type: CompanyRequest, description: 'Company request' })
   @ApiOkResponse({ type: CompanyResponse })
@@ -49,6 +54,7 @@ export class CompanyController {
     return this.service.update(request, uuid);
   }
 
+  @Public()
   @Delete(':uuid')
   @ApiNoContentResponse()
   @HttpCode(204)

@@ -1,3 +1,4 @@
+import { Public } from './../auth/decorators/public.decorator';
 import { ApiBody, ApiCreatedResponse, ApiExcludeEndpoint, ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put } from '@nestjs/common';
 import { UserRequest } from './dtos/user.request';
@@ -12,6 +13,7 @@ export class UserController {
     private readonly service: IUserService,
   ) { }
 
+  @Public()
   @Get()
   @ApiOkResponse({ isArray: true, type: UserResponse })
   @HttpCode(200)
@@ -19,6 +21,7 @@ export class UserController {
     return this.service.findAll();
   }
 
+  @Public()
   @Get(':uuid')
   @ApiOkResponse({ type: UserResponse })
   @HttpCode(200)
@@ -28,6 +31,7 @@ export class UserController {
     return this.service.findByUuid(uuid);
   }
 
+  @Public()
   @Post()
   @ApiBody({ type: UserRequest, description: 'Service request' })
   @ApiCreatedResponse({ type: UserResponse })
@@ -38,6 +42,7 @@ export class UserController {
     return this.service.create(request);
   }
 
+  @Public()
   @Put(':uuid')
   @ApiBody({ type: UserRequest, description: 'Service request' })
   @ApiOkResponse({ type: UserResponse })
@@ -49,6 +54,7 @@ export class UserController {
     return this.service.update(request, uuid);
   }
 
+  @Public()
   @Delete(':uuid')
   @ApiNoContentResponse()
   @HttpCode(204)

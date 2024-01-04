@@ -5,14 +5,22 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import * as express from 'express';
 
 async function bootstrap() {
+  const expressSwagger = express()
+
   if (process.env.APP_ENV !== 'production') {
     const dotenv = require('dotenv');
     dotenv.config();
   }
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressSwagger)
+  );
+
   app.use(bodyParser.json({ limit: '50mb' }));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, validateCustomDecorators: true }));
 
@@ -39,6 +47,11 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, documentBuilder);
+
+  expressSwagger.get('/swagger-json', (req, res) => {
+    res.json(document);
+  });
+
   SwaggerModule.setup('/swagger', app, document);
 
   await app.listen(configService.get('APP_PORT'));

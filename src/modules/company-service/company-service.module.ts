@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { CompanyServiceController } from './company-service.controller';
 import { CompanyServiceService } from './company-service.service';
 import { CompanyServiceMapping } from './company-service.mapping';
@@ -16,7 +16,7 @@ import { UpdateCompanyService } from './useCases/update.company-service';
     CompanyServiceController
   ],
   imports: [
-    CompanyModule,
+    forwardRef(() => CompanyModule),
     ServiceModule
   ],
   providers: [

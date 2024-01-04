@@ -8,10 +8,14 @@ import { CreateCompany } from './useCases/create.company';
 import { UpdateCompany } from './useCases/update.company';
 import { DeleteCompany } from './useCases/delete.company ';
 import { CompanyMapping } from './company.mapping';
+import { CompanyServiceModule } from '../company-service/company-service.module';
 
 @Module({
   controllers: [
     CompanyController
+  ],
+  imports: [
+    CompanyServiceModule
   ],
   providers: [
     CompanyService,

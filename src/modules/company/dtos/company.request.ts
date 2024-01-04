@@ -43,4 +43,16 @@ export class CompanyRequest {
   @IsOptional()
   @IsEnum(companyStatus)
   status?: companyStatus;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @Length(1, 45)
+  serviceId?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @Length(1, 3)
+  key?: string;
 }

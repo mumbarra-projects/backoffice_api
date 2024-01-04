@@ -33,4 +33,19 @@ export class UserRepository {
   async delete(uuid: string) {
     return this.repository.delete({ where: { uuid: uuid } });
   }
+
+  async existByUsername(username: string) {
+    const user = this.repository.findUnique({ where: { username: username } })
+    return user ? true : false;
+  }
+
+  async existByDocument(document: string) {
+    const user = this.repository.findUnique({ where: { document: document } })
+    return user ? true : false;
+  }
+
+  async existByEmail(email: string) {
+    const user = this.repository.findUnique({ where: { email: email } })
+    return user ? true : false;
+  }
 }

@@ -10,8 +10,15 @@ export class CompanyRepository {
     private readonly repository: PrismaRepository['company'],
   ) { }
 
-  async find() {
-    return this.repository.findMany();
+  async count() {
+    return this.repository.count();
+  }
+
+  async find(skip: number, take: number) {
+    return this.repository.findMany({
+      skip: skip,
+      take: take,
+    })
   }
 
   async findById(id: bigint) {

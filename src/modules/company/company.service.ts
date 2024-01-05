@@ -8,6 +8,7 @@ import { CreateCompany } from './useCases/create.company';
 import { UpdateCompany } from './useCases/update.company';
 import { ICompanyService } from './company.service.interface';
 import { DeleteCompany } from './useCases/delete.company ';
+import { CompanyListResponse } from './dtos/company-list.response';
 
 @Injectable()
 export class CompanyService implements ICompanyService {
@@ -19,8 +20,8 @@ export class CompanyService implements ICompanyService {
     private readonly deleteCompany: DeleteCompany,
   ) { }
 
-  async findAll(): Promise<CompanyResponse[]> {
-    return this.findAllCompany.execute();
+  async findAll(page?: number, quantity?: number): Promise<CompanyListResponse> {
+    return this.findAllCompany.execute(page, quantity);
   }
 
   async findByUuid(uuid: string): Promise<CompanyResponse> {

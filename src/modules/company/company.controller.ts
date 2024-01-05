@@ -1,11 +1,14 @@
 import { ApiBody, ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Query, UseFilters } from '@nestjs/common';
 import { CompanyResponse } from './dtos/company.response';
 import { CompanyRequest } from './dtos/company.request';
 import { ICompanyService } from './company.service.interface';
 import { Public } from '../auth/decorators/public.decorator';
+import { HttpExceptionFilter } from '@app/config/exception/http.exception.filter';
+import { CompanyListResponse } from './dtos/company-list.response';
 
 @ApiTags('Company')
+@UseFilters(new HttpExceptionFilter())
 @Controller('company')
 export class CompanyController {
   constructor(
@@ -15,10 +18,13 @@ export class CompanyController {
 
   @Public()
   @Get()
-  @ApiOkResponse({ isArray: true, type: CompanyResponse })
+  @ApiOkResponse({ isArray: true, type: CompanyListResponse })
   @HttpCode(200)
-  async findAll(): Promise<CompanyResponse[]> {
-    return this.service.findAll();
+  async findAll(
+    @Query('page') page?: number,
+    @Query('quantity') quantity?: number
+  ): Promise<CompanyListResponse> {
+    return this.service.findAll(page, quantity);
   }
 
   @Public()

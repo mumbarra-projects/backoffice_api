@@ -3,6 +3,7 @@ import { CompanyModel } from './dtos/company.model';
 import { CompanyResponse } from './dtos/company.response';
 import { CompanyRequest } from './dtos/company.request';
 import { v4 as uuid } from 'uuid';
+import { CompanyListResponse } from './dtos/company-list.response';
 
 @Injectable()
 export class CompanyMapping {
@@ -53,7 +54,13 @@ export class CompanyMapping {
     });
   }
 
-  responseList(models: CompanyModel[]): CompanyResponse[] {
-    return models.map((model: CompanyModel) => this.response(model));
+  responseList(models: CompanyModel[], count: number, page: number, quantity: number): CompanyListResponse {
+    const responses = models.map((model: CompanyModel) => this.response(model));
+    return {
+      count: count,
+      page: page,
+      quantity: quantity,
+      data: responses
+    };
   }
 }
